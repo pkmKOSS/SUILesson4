@@ -9,10 +9,22 @@ import Foundation
 
 /// Альбом с композициями.
 struct SongAlbum {
+
+    // MARK: - private constants
+
+    private enum Constants {
+        static let gopStopName = "gopStop"
+        static let myBitsUpName = "myBitsUp"
+        static let naZareName = "naZare"
+        static let slepakovName = "slepakov"
+        static let jumpFromRockName = "jumpFromRock"
+    }
+
+
     /// Массив с композициями.
-    let songs = [Song(name: "gopStop", imageName: "gopStop"),
-                 Song(name: "myBitsUp", imageName: "myBitsUp"),
-                 Song(name: "naZare", imageName: "naZare"),
-                 Song(name: "slepakov", imageName: "slepakov"),
-                 Song(name: "jumpFromRock", imageName: "jumpFromRock")]
+    let songs = [Song(name: Constants.gopStopName, imageName: Constants.gopStopName),
+                 Song(name: Constants.myBitsUpName, imageName: Constants.myBitsUpName),
+                 Song(name: Constants.naZareName, imageName: Constants.naZareName),
+                 Song(name: Constants.slepakovName, imageName: Constants.slepakovName),
+                 Song(name: Constants.jumpFromRockName, imageName: Constants.jumpFromRockName)]
 }

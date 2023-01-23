@@ -15,20 +15,11 @@ final class PlayerViewModel: ObservableObject {
 
     private enum Constants {
         static let trackFormat = "mp3"
+        static let emptyString = ""
+        static let zeroValue = 0
+        static let floatZeroValue: CGFloat = 0.0
+        static let unoValue = 1
     }
-
-    // MARK: - public properties
-
-    @Published var player: AVAudioPlayer?
-    @Published var currentSongIndex: Int?
-    @Published var musicAlbum = SongAlbum().songs
-    @Published var currentDuratiuon: Double = 0
-    @Published var maxDuration = 0.0
-    @Published var volume = 0.0
-
-    // MARK: - private properties
-
-    private var timer: Timer?
 
     // MARK: - public methods
 
@@ -36,9 +27,9 @@ final class PlayerViewModel: ObservableObject {
         guard
             let songIndex = currentSongIndex
         else {
-            playSong(name: musicAlbum.first?.name ?? "")
+            playSong(name: musicAlbum.first?.name ?? Constants.emptyString)
             player?.play()
-            currentSongIndex = 0
+            currentSongIndex = Constants.zeroValue
             return }
 
         playSong(name: musicAlbum[songIndex].name)
@@ -55,7 +46,7 @@ final class PlayerViewModel: ObservableObject {
             let index = currentSongIndex
         else { return }
 
-        let nextIndex = index + 1
+        let nextIndex = index + Constants.unoValue
 
         guard nextIndex != musicAlbum.count else { return }
 
@@ -71,9 +62,9 @@ final class PlayerViewModel: ObservableObject {
             let index = currentSongIndex
         else { return }
 
-        let previusIndex = index - 1
+        let previusIndex = index - Constants.unoValue
 
-        guard previusIndex != 0 else { return }
+        guard previusIndex != Constants.zeroValue else { return }
 
         currentSongIndex = previusIndex
 
@@ -96,6 +87,16 @@ final class PlayerViewModel: ObservableObject {
         player?.volume = volume
     }
 
+    // MARK: - private properties
+
+    @Published private var player: AVAudioPlayer?
+    @Published var currentSongIndex: Int?
+    @Published var musicAlbum = SongAlbum().songs
+    @Published var currentDuratiuon = Double(Constants.zeroValue)
+    @Published private var maxDuration = Constants.floatZeroValue
+    @Published private var volume = Constants.floatZeroValue
+    private var timer: Timer?
+
     // MARK: - private methods
 
     private func playSong(name: String) {
@@ -103,16 +104,16 @@ final class PlayerViewModel: ObservableObject {
 
         do {
             try player = AVAudioPlayer(contentsOf: URL(fileURLWithPath: audioPath))
-            player?.volume = 1
+            player?.volume = Float(Constants.unoValue)
             startTimer()
-            maxDuration = player?.duration ?? 0.0
+            maxDuration = player?.duration ?? Constants.floatZeroValue
         } catch {
             print(error.localizedDescription)
         }
     }
 
     private func startTimer() {
-        Timer.scheduledTimer(withTimeInterval: 1, repeats: true, block: { [ weak self ] _ in
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(Constants.unoValue), repeats: true, block: { [ weak self ] _ in
             guard
                 let self = self,
                 let player = self.player

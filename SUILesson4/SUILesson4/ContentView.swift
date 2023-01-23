@@ -26,90 +26,100 @@ struct ContentView: View {
         static let rowRightImageName = "arrow.right.to.line"
         static let zeroName = "0"
         static let hundredName = "100"
+        static let doubleScaleEffectCoef: CGFloat = 2
+        static let zeroValue = 0
+        static let unoValue = 1
+        static let tenValue = 10
+        static let makeSoneButtonWidth: CGFloat = 250
+        static let makeInfoAboutSongSpacerWidht: CGFloat = 33
+        static let makeInfoAboutSongSectionWidht: CGFloat = 200
+        static let makeSongDuratonSliderHeight: CGFloat = 50
+        static let sixtyValue: CGFloat = 60
     }
 
     // MARK: - public properties
 
-    @ObservedObject var viewModel = PlayerViewModel()
 
     var body: some View {
         ZStack {
-            RoundedRectangle(cornerRadius: 1)
+            RoundedRectangle(cornerRadius: CGFloat(Constants.unoValue))
             VStack {
                 HStack {
-                    makeDownLoadButton
-                    makeSongPosterImage
-                    makeShareSongButton
+                    makeDownLoadButtonView
+                    makeSongPosterImageView
+                    makeShareSongButtonView
                 }
                 HStack {
-                    makeInfoAboutSongSection
+                    makeInfoAboutSongSectionView
                 }
-                .frame(height: 10)
+                .frame(height: CGFloat(Constants.tenValue))
                 .padding()
 
-                makeSongDuratonSlider
+                makeSongDuratonSliderView
 
                 HStack {
-                    makePlayPreviusSongButton
-                    makePlaySongButton
-                    makePauseSongButton
-                    makeStopSongButton
-                    makePlayNextSongButton
+                    makePlayPreviusSongButtonView
+                    makePlaySongButtonView
+                    makePauseSongButtonView
+                    makeStopSongButtonView
+                    makePlayNextSongButtonView
                 }
-                makeVolumeSlider
+                makeVolumeSliderView
             }.background(Color.black)
         }
     }
 
+
     // MARK: Private properties
 
-    @State private var progress: Double = 0
-    @State private var volume: Float = 0
+    @ObservedObject private var viewModel = PlayerViewModel()
+    @State private var progress: Double = Double(Constants.zeroValue)
+    @State private var volume: Float = Float(Constants.zeroValue)
     @State private var isDownloadActionSheertShown = false
     @State private var isEditing = false
 
-    private var makeDownLoadButton: some View {
+    private var makeDownLoadButtonView: some View {
         Button {
             self.isDownloadActionSheertShown = true
         } label: {
             Image(systemName: Constants.rowDownImageName)
-                .scaleEffect(x: 2, y: 2)
+                .scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
                 .foregroundColor(.green)
         }.confirmationDialog(Constants.trackDownloadedName, isPresented: $isDownloadActionSheertShown, titleVisibility: .visible) {}
     }
 
-    var makeSongPosterImage: some View  {
-        Image(self.viewModel.musicAlbum[viewModel.currentSongIndex ?? 0].imageName)
+    private var makeSongPosterImageView: some View  {
+        Image(self.viewModel.musicAlbum[viewModel.currentSongIndex ?? Constants.zeroValue].imageName)
             .resizable()
             .scaledToFit()
             .padding()
-            .frame(width: 250)
+            .frame(width: Constants.makeSoneButtonWidth)
     }
 
-    private var makeShareSongButton: some View {
+    private var makeShareSongButtonView: some View {
         Button {
-            self.progress = 10
+            self.progress = CGFloat(Constants.tenValue)
         } label: {
             Image(systemName: Constants.rowUpImageName)
-                .scaleEffect(x: 2, y: 2)
+                .scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
                 .foregroundColor(.green)
         }
     }
 
-    private var makeInfoAboutSongSection: some View {
+    private var makeInfoAboutSongSectionView: some View {
         Section {
             Text(Constants.trackDurationName).padding()
-            Spacer().frame(width: 33)
-            Text(viewModel.musicAlbum[viewModel.currentSongIndex ?? 0].name)
-                .frame(width: 200)
+            Spacer().frame(width: Constants.makeInfoAboutSongSpacerWidht)
+            Text(viewModel.musicAlbum[viewModel.currentSongIndex ?? Constants.zeroValue].name)
+                .frame(width: Constants.makeInfoAboutSongSectionWidht)
                 .foregroundColor(.green)
                 .padding()
         }
-        .frame(height: 10)
+        .frame(height: CGFloat(Constants.tenValue))
         .foregroundColor(.green)
     }
 
-    private var makeSongDuratonSlider: some View {
+    private var makeSongDuratonSliderView: some View {
         Slider(value: Binding(get: {
             self.viewModel.currentDuratiuon
         }, set: { newValue in
@@ -128,67 +138,67 @@ struct ContentView: View {
         }
         .padding()
         .accentColor(Color.green)
-        .frame(height: 50)
+        .frame(height: Constants.makeSongDuratonSliderHeight)
     }
 
-    private var makePlayPreviusSongButton: some View {
+    private var makePlayPreviusSongButtonView: some View {
         Button(action: {
             self.viewModel.playPreviusSong()
         }, label: {
             Image(systemName: Constants.rowLeftImageName)
-                .scaleEffect(x: 2, y: 2)
+                .scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
         })
         .padding()
-        .frame(width: 60)
+        .frame(width: Constants.sixtyValue)
         .foregroundColor(.green)
     }
 
-    private var makePlaySongButton: some View {
+    private var makePlaySongButtonView: some View {
         Button(action: {
             self.viewModel.play()
         }, label: {
             Image(systemName: Constants.playImageName)
-                .scaleEffect(x: 2, y: 2)
+                .scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
         })
         .padding()
-        .frame(width: 60)
+        .frame(width: Constants.sixtyValue)
         .foregroundColor(.green)
     }
 
-    private var makePauseSongButton: some View {
+    private var makePauseSongButtonView: some View {
         Button(action: {
             self.viewModel.pause()
         }, label: {
-            Image(systemName: Constants.pauseImageName).scaleEffect(x: 2, y: 2)
+            Image(systemName: Constants.pauseImageName).scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
         })
         .padding()
-        .frame(width: 60)
+        .frame(width: Constants.sixtyValue)
         .foregroundColor(.green)
     }
 
-    private var makeStopSongButton: some View {
+    private var makeStopSongButtonView: some View {
         Button(action: {
             self.viewModel.stop()
         }, label: {
-            Image(systemName: Constants.stopImageName).scaleEffect(x: 2, y: 2)
+            Image(systemName: Constants.stopImageName).scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
         })
         .padding()
-        .frame(width: 60)
+        .frame(width: Constants.sixtyValue)
         .foregroundColor(.green)
     }
 
-    private var makePlayNextSongButton: some View {
+    private var makePlayNextSongButtonView: some View {
         Button(action: {
             self.viewModel.playNext()
         }, label: {
-            Image(systemName: Constants.rowRightImageName).scaleEffect(x: 2, y: 2)
+            Image(systemName: Constants.rowRightImageName).scaleEffect(x: Constants.doubleScaleEffectCoef, y: Constants.doubleScaleEffectCoef)
         })
         .padding()
-        .frame(width: 60)
+        .frame(width: Constants.sixtyValue)
         .foregroundColor(.green)
     }
     
-    private var makeVolumeSlider: some View {
+    private var makeVolumeSliderView: some View {
         Slider(value: Binding(get: {
             Float(self.volume)
         }, set: { newValue in
@@ -202,7 +212,7 @@ struct ContentView: View {
         }
         .padding()
         .accentColor(Color.green)
-        .frame(height: 50)
+        .frame(height: Constants.sixtyValue)
     }
 }
 
