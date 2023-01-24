@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "gopStop.jpeg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
