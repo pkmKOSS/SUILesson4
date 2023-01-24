@@ -10,7 +10,7 @@ import Foundation
 /// Альбом с композициями.
 struct SongAlbum {
 
-    // MARK: - private constants
+    // MARK: - Private constants
 
     private enum Constants {
         static let gopStopName = "gopStop"

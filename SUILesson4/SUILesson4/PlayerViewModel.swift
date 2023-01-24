@@ -8,10 +8,10 @@
 import Foundation
 import AVFoundation
 
-/// Модель проигрывателя.
+/// mp3 плеер.
 final class PlayerViewModel: ObservableObject {
 
-    // MARK: - private Constants
+    // MARK: - Private Constants
 
     private enum Constants {
         static let trackFormat = "mp3"
@@ -21,7 +21,13 @@ final class PlayerViewModel: ObservableObject {
         static let unoValue = 1
     }
 
-    // MARK: - public methods
+    // MARK: - Public properties
+
+    @Published var currentSongIndex: Int?
+    @Published var musicAlbum = SongAlbum().songs
+    @Published var currentDuratiuon = Double(Constants.zeroValue)
+
+    // MARK: - Public methods
 
     func play() {
         guard
@@ -30,7 +36,8 @@ final class PlayerViewModel: ObservableObject {
             playSong(name: musicAlbum.first?.name ?? Constants.emptyString)
             player?.play()
             currentSongIndex = Constants.zeroValue
-            return }
+            return
+        }
 
         playSong(name: musicAlbum[songIndex].name)
         player?.play()
@@ -87,17 +94,15 @@ final class PlayerViewModel: ObservableObject {
         player?.volume = volume
     }
 
-    // MARK: - private properties
+    // MARK: - Private properties
 
     @Published private var player: AVAudioPlayer?
-    @Published var currentSongIndex: Int?
-    @Published var musicAlbum = SongAlbum().songs
-    @Published var currentDuratiuon = Double(Constants.zeroValue)
     @Published private var maxDuration = Constants.floatZeroValue
     @Published private var volume = Constants.floatZeroValue
+
     private var timer: Timer?
 
-    // MARK: - private methods
+    // MARK: - Private methods
 
     private func playSong(name: String) {
         guard let audioPath = Bundle.main.path(forResource: name, ofType: Constants.trackFormat) else { return }
